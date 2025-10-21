@@ -1,0 +1,4 @@
+{
+    "command": "pytest",
+    "working_directory": "/home/kavia/workspace/code-generation/cinema-explorer-178463-178472/movie_backend"
+}
