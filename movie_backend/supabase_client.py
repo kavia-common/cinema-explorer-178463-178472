@@ -18,8 +18,9 @@ def get_supabase() -> "Client":
     """Return a lazily initialized Supabase client.
 
     This function creates the client on first use using environment variables:
-    SUPABASE_URL and SUPABASE_KEY. It does not perform any network calls at
-    import time. Subsequent calls return the cached instance.
+    SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (preferred) or SUPABASE_KEY.
+    It does not perform any network calls at import time. Subsequent calls
+    return the cached instance.
 
     Raises:
         RuntimeError: If required environment variables are missing or if the
@@ -34,10 +35,12 @@ def get_supabase() -> "Client":
         return _client
 
     supabase_url = os.getenv("SUPABASE_URL")
-    supabase_key = os.getenv("SUPABASE_KEY")
+    supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
 
     if not supabase_url or not supabase_key:
-        raise RuntimeError("Supabase env vars not configured: SUPABASE_URL/SUPABASE_KEY")
+        raise RuntimeError(
+            "Supabase env vars not configured. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."
+        )
 
     if create_client is None:
         raise RuntimeError(
